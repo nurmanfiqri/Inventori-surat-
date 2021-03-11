@@ -1,69 +1,67 @@
 <?php
 
-namespace App\Http\Controllers\Menu;
+namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
-use App\Models\Menu\MenuModel;
+use App\Models\Master\MasterModel;
 
-class MenuController extends Controller
+class MasterController extends Controller
 {
     public function index()
     {
-        return view('menu.index');
+        return view('master.surat.index');
     }
 
     public function create(Request $request)
     {
 
-        $model = new MenuModel();
+        $model = new MasterModel();
 
         if ($request->isMethod('post')) {
             DB::beginTransaction();
             try {
                 // dd($request->all());
-                $model = new MenuModel();
-                $model->menu = $request->menu;
-                $model->url = $request->url;
+                $model = new MasterModel();
+                $model->nama = $request->nama;
                 $model->is_delete = 0;
                 $model->save();
                 DB::commit();
-                return redirect('menu')->with(['success' => 'Informasi baru berhasil disimpan']);
+                return redirect('master/surat')->with(['success' => 'Informasi baru berhasil disimpan']);
             } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
             }
         }
-        return view('menu.createmenu');
+        return view('master.surat.create');
     }
 
     public function update(Request $request)
     {
-        $model = MenuModel::query()->where(['id' => $request->id])->first();
+        $model = MasterModel::query()->where(['id' => $request->id])->first();
         $title = 'Update Informasi';
         if ($request->isMethod('post')) {
             DB::beginTransaction();
             try {
-                $model = MenuModel::find($request->id);
-                $model->menu = $request->menu;
-                $model->url = $request->url;
+                $model = MasterModel::find($request->id);
+                $model->nama = $request->nama;
                 $model->is_delete = 0;
 
                 $model->update();
                 DB::commit();
-                return redirect('menu')->with(['success' => 'Data Berhasil di Update']);
+                return redirect('master/surat')->with(['success' => 'Data Berhasil di Update']);
             } catch (\Exceptopn $e) {
                 DB::rollBack();
                 return $e;
             }
         }
-        return view('menu.createmenu', compact('title', 'model'));
+        return view('master..surat.create', compact('title', 'model'));
     }
 
     public function delete($id)
     {
-        $model = MenuModel::where(['id' => $id])->first();
+        $model = MasterModel::where(['id' => $id])->first();
 
         if (empty($model)) {
             abort(404);

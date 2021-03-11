@@ -1,69 +1,68 @@
 <?php
 
-namespace App\Http\Controllers\Menu;
+namespace App\Http\Controllers\Approval;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Approval\ApprovalModel;
 use DB;
-use App\Models\Menu\MenuModel;
 
-class MenuController extends Controller
+class ListController extends Controller
 {
     public function index()
     {
-        return view('menu.index');
+        $title = 'Approval Log';
+        return view('approval.list.index', compact('title'));
     }
 
     public function create(Request $request)
     {
 
-        $model = new MenuModel();
+        $model = new ApprovalModel();
 
         if ($request->isMethod('post')) {
             DB::beginTransaction();
             try {
                 // dd($request->all());
-                $model = new MenuModel();
-                $model->menu = $request->menu;
-                $model->url = $request->url;
+                $model = new ApprovalModel();
+                $model->nama = $request->nama;
                 $model->is_delete = 0;
                 $model->save();
                 DB::commit();
-                return redirect('menu')->with(['success' => 'Informasi baru berhasil disimpan']);
+                return redirect('approval/approval_list')->with(['success' => 'Informasi baru berhasil disimpan']);
             } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
             }
         }
-        return view('menu.createmenu');
+        return view('approval.list.create');
     }
 
     public function update(Request $request)
     {
-        $model = MenuModel::query()->where(['id' => $request->id])->first();
+        $model = ApprovalModel::query()->where(['id' => $request->id])->first();
         $title = 'Update Informasi';
         if ($request->isMethod('post')) {
             DB::beginTransaction();
             try {
-                $model = MenuModel::find($request->id);
-                $model->menu = $request->menu;
-                $model->url = $request->url;
+                $model = ApprovalModel::find($request->id);
+                $model->nama = $request->nama;
                 $model->is_delete = 0;
 
                 $model->update();
                 DB::commit();
-                return redirect('menu')->with(['success' => 'Data Berhasil di Update']);
+                return redirect('approval/approval_list')->with(['success' => 'Data Berhasil di Update']);
             } catch (\Exceptopn $e) {
                 DB::rollBack();
                 return $e;
             }
         }
-        return view('menu.createmenu', compact('title', 'model'));
+        return view('approval.list.create', compact('title', 'model'));
     }
 
     public function delete($id)
     {
-        $model = MenuModel::where(['id' => $id])->first();
+        $model = ApprovalModel::where(['id' => $id])->first();
 
         if (empty($model)) {
             abort(404);

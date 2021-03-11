@@ -23,26 +23,122 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::group(['middleware' => ['auth', 'ceklevel:admin']], function () {
     // Halaman Dashboard
     Route::get('/dashboard', 'Admin\DashboardController@index')->name('dashboard');
+
     //Halaman User
     Route::get('/user', 'User\UserController@index')->name('user');
     Route::get('/user/create', 'User\UserController@create')->name('createuser');
+
     // Halaman Route
-    Route::get('/role', 'Role\RoleController@index')->name('role');
-    Route::get('/role/create', 'Role\RoleController@create')->name('createrole');
-    Route::post('/role/create', 'Role\RoleController@create')->name('createrole');
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/', 'Role\RoleController@index')->name('role');
+        Route::get('/create', 'Role\RoleController@create')->name('createrole');
+        Route::post('/create', 'Role\RoleController@create')->name('createrole');
+        Route::get('/update/{id}', 'Role\RoleController@update');
+        Route::post('/update/{id}', 'Role\RoleController@update');
+        Route::post('/delete/{id}', 'Role\RoleController@delete');
+    });
+    Route::group(['prefix' => 'api/'], function () {
+        Route::group(['prefix' => 'role'], function () {
+            Route::get('/list', 'Api\ApiRoleController@list');
+        });
+    });
+
     // Halaman Menu
-    Route::get('/menu', 'Menu\MenuController@index')->name('menu');
+    Route::group(['prefix' => 'menu'], function () {
+        Route::get('/', 'Menu\MenuController@index')->name('menu');
+        Route::get('/create', 'Menu\MenuController@create');
+        Route::post('/create', 'Menu\menuController@create');
+        Route::get('/update/{id}', 'Menu\menuController@update');
+        Route::post('/update/{id}', 'Menu\menuController@update');
+        Route::post('/delete/{id}', 'Menu\menuController@delete');
+    });
+    Route::group(['prefix' => 'api/'], function () {
+        Route::group(['prefix' => 'menu'], function () {
+            Route::get('/list', 'Api\ApiMenuController@list');
+        });
+    });
 });
 
 Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
     // Halaman Dashboard
     Route::get('/dashboard', 'Admin\DashboardController@index')->name('dashboard');
-    // Halaman approval
-    Route::get('/approvallist', 'Approval\ApprovalController@approvallist')->name('approvallist');
+
     //halaman master data surat 
-    Route::get('/masterdatasurat', 'Master\MasterController@index')->name('master');
-    //Halmanan Approval Log
-    Route::get('/approvallog', 'Approval\ApprovalController@approvallog')->name('approvallog');
+    Route::group(['prefix' => 'master/'], function () {
+        Route::group(['prefix' => 'surat'], function () {
+            Route::get('/', 'Master\MasterController@index')->name('master');
+            Route::get('/create', 'Master\MasterController@create');
+            Route::post('/create', 'Master\MasterController@create');
+            Route::get('/update/{id}', 'Master\MasterController@update');
+            Route::post('/update/{id}', 'Master\MasterController@update');
+            Route::post('/delete/{id}', 'Master\MasterController@delete');
+        });
+    });
+
+    Route::group(['prefix' => 'api/'], function () {
+        Route::group(['prefix' => 'master'], function () {
+            Route::get('/list', 'Api\ApiMasterController@list');
+        });
+    });
+
+    // Halaman approval list
+    Route::group(['prefix' => 'approval/'], function () {
+        Route::group(['prefix' => 'approval_list'], function () {
+            Route::get('/', 'Approval\ListController@index');
+            Route::get('/create', 'Approval\ListController@create');
+            Route::post('/create', 'Approval\ListController@create');
+            Route::get('/update/{id}', 'Approval\ListController@update');
+            Route::post('/update/{id}', 'Approval\ListController@update');
+            Route::post('/delete/{id}', 'Approval\ListController@delete');
+        });
+    });
+
+    Route::group(['prefix' => 'api/'], function () {
+        Route::group(['prefix' => 'approval'], function () {
+            Route::get('/list', 'Api\ApiApprovalController@list');
+        });
+    });
+
+    //Halaman Approval Log
+    Route::group(['prefix' => 'approval/'], function () {
+        Route::group(['prefix' => 'approval_log'], function () {
+            Route::get('/', 'Approval\LogController@index');
+        });
+    });
+
+    Route::group(['prefix' => 'api/'], function () {
+        Route::group(['prefix' => 'approval'], function () {
+            Route::get('/log', 'Api\ApiApprovalController@log');
+        });
+    });
+
+    //Halaman setting
+    Route::group(['prefix' => 'setting/'], function () {
+        Route::group(['prefix' => 'workflow'], function () {
+            Route::get('/', 'Setting\WorkflowController@index');
+            Route::get('/create', 'Setting\WorkflowController@create');
+            Route::post('/create', 'Setting\WorkflowController@create');
+            Route::get('/update/{id}', 'Setting\WorkflowController@update');
+            Route::post('/update/{id}', 'Setting\WorkflowController@update');
+            Route::post('/delete/{id}', 'Setting\WorkflowController@delete');
+        });
+
+        Route::group(['prefix' => 'unit_kerja'], function () {
+            Route::get('/', 'Setting\UnitKerjaController@index');
+            Route::get('/create', 'Setting\UnitKerjaController@create');
+            Route::post('/create', 'Setting\UnitKerjaController@create');
+            Route::get('/update/{id}', 'Setting\UnitKerjaController@update');
+            Route::post('/update/{id}', 'Setting\UnitKerjaController@update');
+            Route::post('/delete/{id}', 'Setting\UnitKerjaController@delete');
+        });
+    });
+
+    Route::group(['prefix' => 'api/'], function () {
+        Route::group(['prefix' => 'approval'], function () {
+            Route::get('/workflow', 'Api\ApiApprovalController@workflow');
+            Route::get('/unitkerja', 'Api\ApiApprovalController@unitkerja');
+        });
+    });
 });
 
 // Route::group(['prefix' => 'user'],  function () {

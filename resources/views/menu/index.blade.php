@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Role')
+@section('title', 'Menu')
 @section('content')
 
 <!-- Main content -->
@@ -15,7 +15,7 @@
         </div>
         @endif
         <div class="card-tools">
-          <a href="{{ url('/role/create')}}" class="btn btn-primary">Tambah</a>
+          <a href="{{ url('/menu/create')}}" class="btn btn-primary">Tambah</a>
         </div>
       </div>
       <!-- /.card-header -->
@@ -24,7 +24,8 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama</th>
+                    <th>Menu</th>
+                    <th>URL</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -52,7 +53,7 @@
             buttons: {
                 Hapus: function () {
                   $.ajax({
-                    url: `{{url('role/delete/${param}')}}`, //route
+                    url: `{{url('menu/delete/${param}')}}`, //route
                     type: 'POST',
                     data: {
                       "_token": "{{ csrf_token() }}",
@@ -78,13 +79,14 @@
               responsive: true,
               bDestroy: true,
               ajax: {
-                url: "{{url('api/role/list')}}",
+                url: "{{url('api/menu/list')}}",
                 method: "GET",
                 dataType: "JSON"
               },
               columns:[
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                {data: 'role', name: 'role'},
+                {data: 'menu', name: 'menu'},
+                {data: 'url', name: 'url'},
                 {data: 'aksi', name: 'aksi'}
               ],
               order: [
