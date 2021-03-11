@@ -41,6 +41,9 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin']], function () {
         Route::group(['prefix' => 'role'], function () {
             Route::get('/list', 'Api\ApiRoleController@list');
         });
+        Route::group(['prefix' => 'master'], function () {
+            Route::get('/divisi', 'Api\ApiRoleController@list');
+        });
     });
 
     // Halaman Menu
@@ -53,8 +56,8 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin']], function () {
         Route::post('/delete/{id}', 'Menu\menuController@delete');
     });
     Route::group(['prefix' => 'api/'], function () {
-        Route::group(['prefix' => 'menu'], function () {
-            Route::get('/list', 'Api\ApiMenuController@list');
+        Route::group(['prefix' => 'master'], function () {
+            Route::get('/divisi', 'Api\ApiMasterController@divisi');
         });
     });
 });
@@ -72,6 +75,16 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
             Route::get('/update/{id}', 'Master\MasterController@update');
             Route::post('/update/{id}', 'Master\MasterController@update');
             Route::post('/delete/{id}', 'Master\MasterController@delete');
+        });
+
+        Route::group(['prefix' => 'divisi'], function () {
+            Route::get('/', 'Master\DivisiController@index')->name('master');
+            Route::get('/create', 'Master\DivisiController@create');
+            Route::post('/create', 'Master\DivisiController@create');
+            Route::get('/update/{id}', 'Master\DivisiController@update');
+            Route::get('/view/{id}', 'Master\DivisiController@view');
+            Route::post('/update/{id}', 'Master\DivisiController@update');
+            Route::post('/delete/{id}', 'Master\DivisiController@delete');
         });
     });
 
@@ -130,6 +143,15 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
             Route::get('/update/{id}', 'Setting\UnitKerjaController@update');
             Route::post('/update/{id}', 'Setting\UnitKerjaController@update');
             Route::post('/delete/{id}', 'Setting\UnitKerjaController@delete');
+        });
+
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', 'Setting\UserController@index');
+            Route::get('/create', 'Setting\UserController@create');
+            Route::post('/create', 'Setting\UserController@create');
+            Route::get('/update/{id}', 'Setting\UserController@update');
+            Route::post('/update/{id}', 'Setting\UserController@update');
+            Route::post('/delete/{id}', 'Setting\UserController@delete');
         });
     });
 

@@ -35,7 +35,7 @@ class UnitKerjaController extends Controller
                 return $e;
             }
         }
-        return view('setting.unitkerja.create');
+        return view('setting.unitkerja.create', compact('model'));
     }
 
     public function update(Request $request)
