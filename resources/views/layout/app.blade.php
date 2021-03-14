@@ -29,6 +29,9 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{url('template/plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{url('template/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -243,6 +246,9 @@
 <!-- DataTables -->
 <script src="{{asset('template/')}}/plugins/datatables/jquery.dataTables.js"></script>
 <script src="{{asset('template/')}}/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+<!-- Select2 -->
+<script src="{{url('template/plugins/select2/js/select2.full.min.js')}}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>

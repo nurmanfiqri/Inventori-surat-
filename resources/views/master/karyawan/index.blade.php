@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>{{isset($title) ? $title : 'Master Data Divisi'}}</h1>
+          <h1>{{isset($title) ? $title : 'Master Data Karyawan'}}</h1>
         </div>
       </div>
     </div><!-- /.container-fluid -->
@@ -24,7 +24,7 @@
                 </div>
                 @endif
                 <div class="card-tools">
-                  <a href="{{ url('master/divisi/create')}}" class="btn btn-primary">Tambah Divisi</a>
+                  <a href="{{ url('master/karyawan/create')}}" class="btn btn-primary">Tambah Karyawan</a>
                 </div>
               </div>
           <!-- /.card-header -->
@@ -33,7 +33,9 @@
               <thead>
               <tr>
                 <th>No</th>
-                <th>Nama Divisi</th>
+                <th>Nama Karyawan</th>
+                <th>Divisi</th>
+                <th>Jabatan</th>
                 <th>Aksi</th>
               </tr>
               </thead>
@@ -49,7 +51,7 @@
 
 @section('script')
     <script>
-        function hapus(param){
+      function hapus(param){
           $.confirm({
             title: 'Perhatian',
             content: 'Apakah Anda Yakin akan menghapus data ini?',
@@ -58,7 +60,7 @@
             buttons: {
                 Hapus: function () {
                   $.ajax({
-                    url: `{{url('master/divisi/delete/${param}')}}`, //route
+                    url: `{{url('master/karyawan/delete/${param}')}}`, //route
                     type: 'POST',
                     data: {
                       "_token": "{{ csrf_token() }}",
@@ -77,26 +79,29 @@
         });
         }
 
-        $(document).ready(function(){
-            $('#example1').dataTable({
-                processing: true, 
-                serverside: true,
-                responsive: true,
-                bDestroy: true,
-                ajax: {
-                    url: "{{url('api/master/divisi')}}",
-                    method: "GET",
-                    dataType: "JSON"
-                },
-                columns: [
-                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                    {data: 'nama_divisi', name: 'nama_divisi'},
-                    {data: 'aksi', name: 'aksi'}
-                ],
-                order: [
-                    [0, 'asc']
-                ]
-            })
+      $(document).ready(function(){
+        $('#example1').dataTable({
+          processing: true,
+          serverside: true,
+          responsive: true,
+          bDestroy: true,
+
+          ajax: {
+            url: "{{url('api/master/karyawan')}}",
+            type: "GET",
+            dataType: "JSON"
+          },
+          columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'nama_karyawan', name: 'nama_karyawan'},
+            {data: 'divisi', name: 'divisi'},
+            {data: 'jabatan', name: 'jabatan'},
+            {data: 'aksi', name: 'aksi'}
+          ],
+          order: [
+            [0, 'asc']
+          ]
         })
+      })
     </script>
 @endsection

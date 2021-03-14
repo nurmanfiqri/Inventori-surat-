@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class MdKaryawan extends Migration
+class Karyawan extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,7 @@ class MdKaryawan extends Migration
      */
     public function up()
     {
-        Schema::create('karyawan', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('nama_karyawan');
-            $table->integer('id_divisi');
-            $table->integer('id_jabatan');
-            $table->string('is_delete');
-            $table->timestamps();
-        });
+        //
     }
 
     /**

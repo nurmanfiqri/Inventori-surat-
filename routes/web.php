@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin']], function () {
     Route::group(['prefix' => 'api/'], function () {
         Route::group(['prefix' => 'master'], function () {
             Route::get('/divisi', 'Api\ApiMasterController@divisi');
+            Route::get('/karyawan', 'Api\ApiMasterController@karyawan');
         });
     });
 });
@@ -85,6 +86,16 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
             Route::get('/view/{id}', 'Master\DivisiController@view');
             Route::post('/update/{id}', 'Master\DivisiController@update');
             Route::post('/delete/{id}', 'Master\DivisiController@delete');
+        });
+
+        Route::group(['prefix' => 'karyawan'], function () {
+            Route::get('/', 'Master\KaryawanController@index')->name('master');
+            Route::get('/create', 'Master\KaryawanController@create');
+            Route::post('/create', 'Master\KaryawanController@create');
+            Route::get('/update/{id}', 'Master\KaryawanController@update');
+            Route::get('/view/{id}', 'Master\KaryawanController@view');
+            Route::post('/update/{id}', 'Master\KaryawanController@update');
+            Route::post('/delete/{id}', 'Master\KaryawanController@delete');
         });
     });
 
@@ -122,6 +133,11 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
     Route::group(['prefix' => 'api/'], function () {
         Route::group(['prefix' => 'approval'], function () {
             Route::get('/log', 'Api\ApiApprovalController@log');
+        });
+
+        Route::group(['prefix' => 'select2'], function () {
+            Route::get('/divisi', 'Api\ApiSelect2Controller@divisi');
+            Route::get('/jabatan', 'Api\ApiSelect2Controller@jabatan');
         });
     });
 
