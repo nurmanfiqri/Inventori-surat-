@@ -6,17 +6,20 @@ use App\Models\Role\RoleModel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Session;
 
 class RoleController extends Controller
 {
     public function index()
     {
-        return view('role.index');
+        $title = "Setting Role";
+        return view('setting.role.index', compact('title'));
     }
 
     public function create(Request $request)
     {
 
+        dd(Session::get('role'));
         $model = new RoleModel();
 
         if ($request->isMethod('post')) {
@@ -34,7 +37,7 @@ class RoleController extends Controller
                 return $e;
             }
         }
-        return view('role.createrole');
+        return view('setting.role.create', compact('model'));
     }
 
     public function update(Request $request)

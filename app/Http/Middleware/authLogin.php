@@ -13,12 +13,24 @@ class authLogin
      * @param  \Closure  $next
      * @return mixed
      */
+    // public function handle($request, Closure $next)
+    // {
+    //     if (\Illuminate\Support\Facades\Session::get('login')) {
+    //         return $next($request);
+    //     } else {
+    //         return abort(404);
+    //     }
+    // }
+
     public function handle($request, Closure $next)
     {
-        if (\Illuminate\Support\Facades\Session::get('login')) {
+        if(Session::get('login')){
             return $next($request);
-        } else {
-            return abort(404);
+        }else{
+            // toastr()->error('Silahkan login dahulu');
+
+            Session::put('previousUrl', URL::full());
+            return redirect('/');
         }
     }
 }

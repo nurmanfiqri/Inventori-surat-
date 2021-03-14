@@ -16,6 +16,10 @@
                     <label for="exampleInputEmail1">Nama</label>
                     <input type="text" class="form-control" placeholder="Nama" name="nama" value="{{isset($model) ? $model->nama : ''}}"></input>
                 </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">File Surat</label>
+                    <input type="file" class="form-control" placeholder="File Surat" name="file">{{isset($model) ? $model->file : ''}}</input>
+                </div>
                 <div class="">
                     <button type="submit" class="btn btn-success">Simpan</button>
                 </div>

@@ -25,6 +25,7 @@
                 <tr>
                     <th>No</th>
                     <th>Nama</th>
+                    <th>Nama File</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -85,6 +86,7 @@
               columns:[
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'nama', name: 'nama'},
+                {data: 'file', name: 'file'},
                 {data: 'aksi', name: 'aksi'}
               ],
               order: [

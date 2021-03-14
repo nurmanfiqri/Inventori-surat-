@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Session;
-use Auth;
 use DB;
 use Illuminate\Http\Request;
 
@@ -18,10 +17,33 @@ class LoginController extends Controller
 
     public function postlogin(Request $request)
     {
-        if (Auth::attempt($request->only('name', 'password'))) {
-            return redirect('/dashboard');
+        if(Session::get('login')){
+            return redirect('/home');
         }
-        return redirect('/login');
+
+        if($request->isMethod('post')){
+            $data= DB::select("
+                select * from users where name = '$request->name' limit 1
+            ");
+
+            dd($data);
+
+            if($data && $data[0]->password == md5($request->password)){
+                Session::put('username', $data[0]->name);
+                Session::put('login', TRUE);
+
+                // if (Session::get('previousUrl')) {
+                //     if ($redirect = Session::get('previousUrl')) {
+                //         Session::forget('previousUrl');
+
+                //         return Redirect::to($redirect);
+                //     }
+                // }
+                return redirect('/home');
+            }
+            return redirect('/')->with(['error' => 'Username / Password Salah']);
+        }
+        return view('aut.login');
     }
 
     public function logout()

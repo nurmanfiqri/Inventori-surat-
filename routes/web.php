@@ -14,29 +14,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'Auth\LoginController@index');
+Route::get('/', function () {
+    return view('auth.login');
+});
 Route::post('/postlogin', 'Auth\LoginController@postlogin');
-Route::get('/login', 'Auth\LoginController@index')->name('login');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
+Route::get('/dashboard', 'Admin\DashboardController@index')->name('dashboard');
+Route::get('/home', 'Admin\HomeController@index')->name('dashboard');
 
-Route::group(['middleware' => ['auth', 'ceklevel:admin']], function () {
+Route::group(['middleware' => 'authLogin'], function () {
     // Halaman Dashboard
-    Route::get('/dashboard', 'Admin\DashboardController@index')->name('dashboard');
+ 
 
     //Halaman User
     Route::get('/user', 'User\UserController@index')->name('user');
     Route::get('/user/create', 'User\UserController@create')->name('createuser');
 
     // Halaman Route
-    Route::group(['prefix' => 'role'], function () {
-        Route::get('/', 'Role\RoleController@index')->name('role');
-        Route::get('/create', 'Role\RoleController@create')->name('createrole');
-        Route::post('/create', 'Role\RoleController@create')->name('createrole');
-        Route::get('/update/{id}', 'Role\RoleController@update');
-        Route::post('/update/{id}', 'Role\RoleController@update');
-        Route::post('/delete/{id}', 'Role\RoleController@delete');
-    });
+ 
     Route::group(['prefix' => 'api/'], function () {
         Route::group(['prefix' => 'role'], function () {
             Route::get('/list', 'Api\ApiRoleController@list');
@@ -168,6 +164,15 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
             Route::get('/update/{id}', 'Setting\UserController@update');
             Route::post('/update/{id}', 'Setting\UserController@update');
             Route::post('/delete/{id}', 'Setting\UserController@delete');
+        });
+
+        Route::group(['prefix' => 'role'], function () {
+            Route::get('/', 'Role\RoleController@index')->name('role');
+            Route::get('/create', 'Role\RoleController@create')->name('createrole');
+            Route::post('/create', 'Role\RoleController@create')->name('createrole');
+            Route::get('/update/{id}', 'Role\RoleController@update');
+            Route::post('/update/{id}', 'Role\RoleController@update');
+            Route::post('/delete/{id}', 'Role\RoleController@delete');
         });
     });
 
