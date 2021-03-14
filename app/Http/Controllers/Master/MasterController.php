@@ -16,8 +16,9 @@ class MasterController extends Controller
 
     public function create(Request $request)
     {
-
+        // dd($request->all());
         $model = new MasterModel();
+
 
         if ($request->isMethod('post')) {
             DB::beginTransaction();
@@ -25,7 +26,19 @@ class MasterController extends Controller
                 // dd($request->all());
                 $model = new MasterModel();
                 $model->nama = $request->nama;
+                if ($request->file) {
+                    $path = $request->file;
+                    $file = $path;
+                    $fileName = str_replace(' ', '_', $file->getClientOriginalName());
+                    $save = $file->storeAs('public/file/', $fileName);
+                    $pathGbr = 'public/file/' . $fileName;
+
+                    $model->file = $fileName;
+                } else {
+                    $model->file = 'Tidak ada File';
+                }
                 $model->is_delete = 0;
+                $model->url_file = $request->file ? $pathGbr : $model->url_file;
                 $model->save();
                 DB::commit();
                 return redirect('master/surat')->with(['success' => 'Informasi baru berhasil disimpan']);
@@ -46,8 +59,19 @@ class MasterController extends Controller
             try {
                 $model = MasterModel::find($request->id);
                 $model->nama = $request->nama;
-                $model->is_delete = 0;
+                if ($request->file) {
+                    $path = $request->file;
+                    $file = $path;
+                    $fileName = str_replace(' ', '_', $file->getClientOriginalName());
+                    $save = $file->storeAs('public/file/', $fileName);
+                    $pathGbr = 'public/file/' . $fileName;
 
+                    $model->file = $fileName;
+                } else {
+                    $model->file = $model->file;
+                }
+                $model->is_delete = 0;
+                $model->url_file = $request->file ? $pathGbr : $model->url_file;
                 $model->update();
                 DB::commit();
                 return redirect('master/surat')->with(['success' => 'Data Berhasil di Update']);

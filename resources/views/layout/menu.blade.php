@@ -56,13 +56,6 @@
           <p>Approval Log</p>
         </a>
       </li>
-      <li class="nav-item">
-        <a href="{{url ('/logout')}}" class="nav-link">
-          <ion-icon class="nav-icon" name="log-out-outline"></ion-icon>
-          {{-- <i class="nav-icon fas fa-th"></i> --}}
-          <p>Logout</p>
-        </a>
-      </li>
 
       <!--- Setting Approval --->
       <li class="nav-item has-treeview">
