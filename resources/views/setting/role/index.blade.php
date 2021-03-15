@@ -46,3 +46,54 @@
     </div>
 </div>
 @endsection
+
+@section('script')
+    <script>
+        function hapus(param){
+          $.confirm({
+            title: 'Perhatian',
+            content: 'Apakah Anda Yakin akan menghapus data ini?',
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                Hapus: function () {
+                  $.ajax({
+                    url: `{{url('setting/role/delte/${param}')}}`, //route
+                    type: 'POST',
+                    data: {
+                      "_token": "{{ csrf_token() }}",
+                    },
+                    success: function (res) {
+                        // toastr.info(res.message);
+                        $.alert(res.message);
+                        $("#example1").DataTable().ajax.reload();
+                    }
+                  });
+                },
+                Batalkan: function () {
+                    $.alert('Dibatalkan');
+                },
+            }
+        });
+        }
+
+        $(document).ready(function(){
+          $('#example1').dataTable({
+            processing: true,
+            serverside: true,
+            bDestroy: true,
+            ajax: {
+              url: "{{url('api/setting/role')}}",
+              type: "GET",
+              dataType: "JSON",
+            },
+            columns:[
+              {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+              {data: 'role', name: 'role'},
+              {data: 'aksi', name: 'aksi'}
+            ],
+            order: [[0, 'asc']]
+          })
+        })
+    </script>
+@endsection

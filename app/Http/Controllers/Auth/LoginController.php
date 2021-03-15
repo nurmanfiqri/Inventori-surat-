@@ -26,7 +26,7 @@ class LoginController extends Controller
                 select * from users where name = '$request->name' limit 1
             ");
 
-            dd($data);
+            // dd($data);
 
             if($data && $data[0]->password == md5($request->password)){
                 Session::put('username', $data[0]->name);

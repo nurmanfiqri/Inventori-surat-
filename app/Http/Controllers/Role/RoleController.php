@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Session;
+use App\Models\Menu\MenuModel;
+use App\Models\Menu\MenuDetail;
+use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
@@ -18,49 +21,101 @@ class RoleController extends Controller
 
     public function create(Request $request)
     {
-
-        dd(Session::get('role'));
         $model = new RoleModel();
+
+        $menu = MenuModel::where([
+            ['parent', 0]
+        ])
+        ->get();
 
         if ($request->isMethod('post')) {
             DB::beginTransaction();
             try {
                 // dd($request->all());
-                $model = new RoleModel();
-                $model->role = $request->role;
+                $validator = Validator::make($request->all(),[
+                    'role' => 'required|unique:role',
+                ]);
+
+                if($validator->fails()){
+                    $error = $validator->messages();
+                }
+
+                $model->role = strtolower($request->role);
                 $model->is_delete = 0;
                 $model->save();
+
+                if(isset($request->menuDetail)){
+                    $model->menuDetail = $request->menuDetail;
+                    foreach($request->menuDetail as $r){
+                        $Menu = new MenuDetail();
+                        $Menu->id_menu = $r;
+                        $Menu->id_role = $model->id;
+                        $Menu->save();
+                    }
+                }
+
+                if(isset($error)){
+                    return view('setting.role.create', compat('model', 'menu'));
+                }
+
                 DB::commit();
-                return redirect('role')->with(['success' => 'Informasi baru berhasil disimpan']);
+
+                return redirect('setting/role/view/'.$model->id)->with(['success' => 'Role baru berhasil ditambahkan']);
             } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
             }
         }
-        return view('setting.role.create', compact('model'));
+        return view('setting.role.create', compact('model', 'menu'));
     }
 
-    public function update(Request $request)
+    public function view(Request $request, $id){
+        $model = RoleModel::where(['id' => $id])->first();
+
+        $menu = MenuModel::where([
+            'parent' => 0
+        ])
+        ->get();
+
+        return view('setting.role.view', compact('model', 'menu'));
+    }
+
+    public function update(Request $request, $id)
     {
-        $model = RoleModel::query()->where(['id' => $request->id])->first();
-        $title = 'Update Informasi';
-        if ($request->isMethod('post')) {
+        $model = RoleModel::where(['id' => $id])->with('menu')->first();
+
+        // dd($model);
+        $menu = MenuModel::where([
+            'parent' => 0
+        ])
+        ->get();
+        
+        if($request->isMethod('post')){
             DB::beginTransaction();
-            try {
-                $model = RoleModel::find($request->id);
-                $model->role = $request->role;
+            try{
+                $model->role = strtolower($request->role);
+                $model->save();
 
-                $model->is_delete = 0;
+                $delete = MenuDetail::where(['id_role' => $id])->delete();
 
-                $model->update();
+                if(isset($request->menuDetail)){
+                    foreach($request->menuDetail as $r){
+                        $Menu = new MenuDetail();
+                        $Menu->id_menu = $r;
+                        $Menu->id_role = $model->id;
+
+                        $Menu->save();
+                    }
+                }
+
                 DB::commit();
-                return redirect('role')->with(['success' => 'Data Berhasil di Update']);
-            } catch (\Exceptopn $e) {
+                return redirect('setting/role/view/'.$model->id)->with(['success' => 'Data berhasil diupdate']);
+            }catch(\Exception $e){
                 DB::rollBack();
                 return $e;
             }
         }
-        return view('role.createrole', compact('title', 'model'));
+        return view('setting.role.create', compact('model', 'menu'));
     }
 
     public function delete($id)

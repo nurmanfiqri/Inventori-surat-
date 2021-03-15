@@ -10,7 +10,7 @@
           <p>Dashboard</p>
         </a>
       </li>
-      @if (auth()->user()->level=="admin")
+  
       <li class="nav-item">
         <a href="{{url ('/user')}}" class="nav-link {{ request()->is('user') ? 'active' : '' }}">
           <ion-icon class="nav-icon" name="people-outline"></ion-icon>
@@ -33,7 +33,6 @@
         </a>
       </li>
      
-      @endif
       <li class="nav-item">
         <a href="{{url ('master/surat')}}" class="nav-link {{ request()->is('master/surat') ? 'active' : '' }}">
           <ion-icon class="nav-icon" name="analytics-outline"></ion-icon>
@@ -88,6 +87,12 @@
             <a href="{{url('setting/user')}}" class="nav-link {{ request()->is('user') ? 'active' : '' }}">
               <ion-icon name="person-add-outline"></ion-icon>
               <p>User</p>
+            </a>
+          </li>
+          <li class="nav-item ml-4">
+            <a href="{{url('setting/role')}}" class="nav-link {{ request()->is('user') ? 'active' : '' }}">
+              <ion-icon name="person-add-outline"></ion-icon>
+              <p>Role</p>
             </a>
           </li>
         </ul>

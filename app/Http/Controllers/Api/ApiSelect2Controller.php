@@ -41,4 +41,38 @@ class ApiSelect2Controller extends Controller
         }
         return response()->json($data);
     }
+
+    public function user(Request $request){
+        if($request->has('q')){
+            $search = $request->q;
+            $data = DB::table('karyawan')
+            ->select('nama_karyawan', 'id')
+            ->where('is_delete', 0)
+            ->where('nama_karyawan', 'LIKE', "%$search%")
+            ->get();
+        } else {
+            $data = DB::table('karyawan')
+            ->select('nama_karyawan', 'id')
+            ->where('is_delete', 0)
+            ->get();
+        }
+        return response()->json($data);
+    }
+
+    public function role(Request $request){
+        if($request->has('q')){
+            $search = $request->q;
+            $data = DB::table('role')
+            ->select('role', 'id')
+            ->where('role', 'LIKE', "%$search%")
+            ->where('is_delete', 0)
+            ->get();
+        } else {
+            $data = DB::table('role')
+            ->select('role', 'id')
+            ->where('is_delete', 0)
+            ->get();
+        }
+        return response()->json($data);
+    }
 }

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Middleware;
-
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
 use Closure;
 
 class authLogin

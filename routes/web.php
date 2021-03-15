@@ -26,21 +26,11 @@ Route::get('/home', 'Admin\HomeController@index')->name('dashboard');
 Route::group(['middleware' => 'authLogin'], function () {
     // Halaman Dashboard
  
-
     //Halaman User
     Route::get('/user', 'User\UserController@index')->name('user');
     Route::get('/user/create', 'User\UserController@create')->name('createuser');
 
     // Halaman Route
- 
-    Route::group(['prefix' => 'api/'], function () {
-        Route::group(['prefix' => 'role'], function () {
-            Route::get('/list', 'Api\ApiRoleController@list');
-        });
-        Route::group(['prefix' => 'master'], function () {
-            Route::get('/divisi', 'Api\ApiRoleController@list');
-        });
-    });
 
     // Halaman Menu
     Route::group(['prefix' => 'menu'], function () {
@@ -56,11 +46,18 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::get('/divisi', 'Api\ApiMasterController@divisi');
             Route::get('/karyawan', 'Api\ApiMasterController@karyawan');
         });
-    });
-});
 
-Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
-    // Halaman Dashboard
+        Route::group(['prefix' => 'role'], function () {
+            Route::get('/list', 'Api\ApiRoleController@list');
+        });
+        Route::group(['prefix' => 'master'], function () {
+            Route::get('/divisi', 'Api\ApiRoleController@list');
+        });
+        Route::group(['prefix' => 'setting'], function () {
+            Route::get('/role', 'Api\ApiRoleController@list');
+        });
+    });
+
     Route::get('/dashboard', 'Admin\DashboardController@index')->name('dashboard');
 
     //halaman master data surat 
@@ -134,6 +131,9 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
         Route::group(['prefix' => 'select2'], function () {
             Route::get('/divisi', 'Api\ApiSelect2Controller@divisi');
             Route::get('/jabatan', 'Api\ApiSelect2Controller@jabatan');
+            Route::get('/user', 'Api\ApiSelect2Controller@user');
+            Route::get('/role', 'Api\ApiSelect2Controller@role');
+            ///lanjuut dari sisi
         });
     });
 
@@ -173,6 +173,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
             Route::get('/update/{id}', 'Role\RoleController@update');
             Route::post('/update/{id}', 'Role\RoleController@update');
             Route::post('/delete/{id}', 'Role\RoleController@delete');
+            Route::get('/view/{id}', 'Role\RoleController@view');
         });
     });
 
@@ -183,6 +184,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,user']], function () {
         });
     });
 });
+
 
 // Route::group(['prefix' => 'user'],  function () {
 //     Route::get('/', 'User\UserController@index');

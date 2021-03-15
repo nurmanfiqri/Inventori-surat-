@@ -7,7 +7,5 @@ use DB;
 
 class UserModel extends Model
 {
-    public function add()
-    {
-    }
+ 
 }
