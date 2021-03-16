@@ -96,6 +96,14 @@ Route::group(['middleware' => 'authLogin'], function () {
         Route::group(['prefix' => 'master'], function () {
             Route::get('/list', 'Api\ApiMasterController@list');
         });
+
+        Route::group(['prefix' => 'approval'], function () {
+            Route::get('/list', 'Api\ApiApprovalController@list');
+        });
+
+        Route::group(['prefix' => 'setting'], function () {
+            Route::get('/userlist', 'Api\ApiUserController@list');
+        });
     });
 
     // Halaman approval list
@@ -111,9 +119,7 @@ Route::group(['middleware' => 'authLogin'], function () {
     });
 
     Route::group(['prefix' => 'api/'], function () {
-        Route::group(['prefix' => 'approval'], function () {
-            Route::get('/list', 'Api\ApiApprovalController@list');
-        });
+      
     });
 
     //Halaman Approval Log

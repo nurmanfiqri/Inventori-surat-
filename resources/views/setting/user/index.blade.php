@@ -100,7 +100,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-            <button type="button" class="btn btn-primary">Simpan</button>
+            <button type="button" class="btn btn-primary" onclick="simpan()">Simpan</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -113,8 +113,13 @@
 
 @section('script')
     <script>
-
       function simpan(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         var id = $('#id').val();
         if(id == '' || id == null){
           $.ajax({
@@ -145,21 +150,22 @@
       }
 
         $(document).ready(function(){
-          $('#example').dataTable({
+          $('#example1').dataTable({
               processing: true, 
               serverside: true,
               responsive: true,
               bDestroy: true,
               ajax: {
-                  url: "{{url('api/approval/userlist')}}",
+                  url: "{{url('api/setting/userlist')}}",
                   method: "GET",
                   dataType: "JSON",
               },
               columns: [
-                  {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                  {data: 'nama', name: 'nama'},
+                  {data: 'DT_RowIndex', name: 'DT_RowIndex', width: '5%'},
+                  {data: 'karyawan', name: 'karyawan'},
                   {data: 'divisi', name: 'divisi'},
                   {data: 'jabatan', name: 'jabatan'},
+                  {data: 'role', name: 'role'},
                   {data: 'aksi', name: 'aksi'}
               ],
               order: [
