@@ -128,7 +128,7 @@
             type: "POST",
             dataType: "JSON",
             success: function(res){
-              $('#modal-default').hide();
+              $('#modal-default').modal('hide');
               console.log(res.message);
               $("#example1").DataTable().ajax.reload();
             }
@@ -140,7 +140,7 @@
             type: "POST",
             dataType: "JSON",
             success: function(res){
-              $('#modal-default').hide();
+              $('#modal-default').modal('hide');
               console.log(res.message);
               $("#example1").DataTable().ajax.reload();
               ///besok lanjut sini
@@ -148,6 +148,51 @@
           })
         }
       }
+
+      function editView(id){
+        $.ajax({
+          url: `{{url('setting/user/editView/${id}')}}`,
+          type: 'GET',
+          dataType: 'JSON',
+          success: function(res){
+            console.log(res);
+            $('#modal-default').modal('show');
+            var karyawan = `<option value="${res.id_karyawan}" selected="selected">${res.karyawan.nama_karyawan}</option>`;
+            var role = `<option value="${res.role.id}" selected="selected">${res.role.role}</option>`;
+            $('#karyawan').append(karyawan);
+            $('#role').append(role);
+            $('#id').val(res.id);
+          }
+        })
+      }
+
+      function hapus(id){
+          $.confirm({
+            title: 'Perhatian',
+            content: 'Apakah Anda Yakin akan menghapus data ini?',
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                Hapus: function () {
+                  $.ajax({
+                    url: `{{url('setting/user/delete/${id}')}}`, //route
+                    type: 'POST',
+                    data: {
+                      "_token": "{{ csrf_token() }}",
+                    },
+                    success: function (res) {
+                        // toastr.info(res.message);
+                        $.alert(res.message);
+                        $("#example1").DataTable().ajax.reload();
+                    }
+                  });
+                },
+                Batalkan: function () {
+                    $.alert('Dibatalkan');
+                },
+            }
+        });
+        }
 
         $(document).ready(function(){
           $('#example1').dataTable({

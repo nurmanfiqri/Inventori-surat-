@@ -170,6 +170,7 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::get('/update/{id}', 'Setting\UserController@update');
             Route::post('/update/{id}', 'Setting\UserController@update');
             Route::post('/delete/{id}', 'Setting\UserController@delete');
+            Route::get('/editView/{id}', 'Setting\UserController@editView');
         });
 
         Route::group(['prefix' => 'role'], function () {
