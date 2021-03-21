@@ -39,6 +39,14 @@
                             <input type="text" class="form-control" placeholder="Masukkan Nama Karyawan" name="nama" value="{{isset($model) ? $model->nama_karyawan : ''}}"></input>
                         </div>
                         <div class="form-group col-md-6">
+                            <label for="exampleInputEmail1">Username <span style="color: deepskyblue">Username digunakan untuk login aplikasi</label>
+                            <input type="text" class="form-control" placeholder="Masukkan Username" name="username" value="{{isset($model) ? $model->username : ''}}"></input>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="exampleInputEmail1">Password <span style="color: deepskyblue">Password digunakan untuk login</label>
+                            <input type="password" class="form-control" placeholder="Masukkan Password" name="password" value="{{isset($model) ? $model->password : ''}}"></input>
+                        </div>
+                        <div class="form-group col-md-6">
                             <label>Divisi</label>
                             <select class="form-control select2bs4" id="divisi" name="divisi" style="width: 100%;">
                             </select>

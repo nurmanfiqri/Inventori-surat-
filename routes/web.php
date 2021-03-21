@@ -50,9 +50,6 @@ Route::group(['middleware' => 'authLogin'], function () {
         Route::group(['prefix' => 'role'], function () {
             Route::get('/list', 'Api\ApiRoleController@list');
         });
-        Route::group(['prefix' => 'master'], function () {
-            Route::get('/divisi', 'Api\ApiRoleController@list');
-        });
         Route::group(['prefix' => 'setting'], function () {
             Route::get('/role', 'Api\ApiRoleController@list');
         });

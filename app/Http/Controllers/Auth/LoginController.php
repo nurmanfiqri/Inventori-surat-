@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Session;
 use DB;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -17,19 +16,24 @@ class LoginController extends Controller
 
     public function postlogin(Request $request)
     {
-        if(Session::get('login')){
+        if (Session::get('login')) {
             return redirect('/home');
         }
 
-        if($request->isMethod('post')){
-            $data= DB::select("
-                select * from users where name = '$request->name' limit 1
+        if ($request->isMethod('post')) {
+            $data = DB::select("
+            select * from karyawan a join setting_role b on a.id = b.id_karyawan and b.is_delete = 0 join role c on c.id = b.id_role join divisi_h d on d.id = a.id_divisi join divisi_d e on e.id = a.id_jabatan where a.username = '$request->name'
             ");
 
             // dd($data);
 
-            if($data && $data[0]->password == md5($request->password)){
-                Session::put('username', $data[0]->name);
+            if ($data && $data[0]->password == md5($request->password)) {
+                Session::put('username', $data[0]->username);
+                Session::put('id_role', $data[0]->id_role);
+                Session::put('nama', $data[0]->nama_karyawan);
+                Session::put('role', $data[0]->role);
+                Session::put('divisi', $data[0]->nama_divisi);
+                Session::put('jabatan', $data[0]->nama_jabatan);
                 Session::put('login', TRUE);
 
                 // if (Session::get('previousUrl')) {
@@ -48,9 +52,11 @@ class LoginController extends Controller
 
     public function logout()
     {
-        Auth::logout();
-        return redirect('/login');
+        Session::flush();
+        // toastr()->success('Logout Berhasil');
+        return redirect('/');
     }
+
 
     // public function postlogin(Request $request)
     // {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Role;
 
+use App\Http\Controllers\BaseController;
 use App\Models\Role\RoleModel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use App\Models\Menu\MenuModel;
 use App\Models\Menu\MenuDetail;
 use Illuminate\Support\Facades\Validator;
 
-class RoleController extends Controller
+class RoleController extends BaseController
 {
     public function index()
     {

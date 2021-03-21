@@ -52,6 +52,7 @@ class ApiMasterController extends Controller
     ///Datatable Divisi & Jabatan
     public function divisi(Request $request){
         $list = Divisi::where('is_delete', 0)->with('jabatan')->get();
+        // dd($list);
         return DataTables::of($list)
         ->addIndexColumn()
         ->addColumn('aksi', function ($data) {

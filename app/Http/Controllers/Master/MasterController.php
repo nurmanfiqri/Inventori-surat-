@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\Master\MasterModel;
 
-class MasterController extends Controller
+class MasterController extends BaseController
 {
     public function index()
     {

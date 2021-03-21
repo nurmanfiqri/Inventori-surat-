@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Master\Karyawan;
 use DB;
 
-class KaryawanController extends Controller
+class KaryawanController extends BaseController
 {
     public function index(){
         $title = 'Master Data Karyawan';
@@ -28,6 +29,8 @@ class KaryawanController extends Controller
             DB::beginTransaction();
             try{
                 $model->nama_karyawan = $request->nama;
+                $model->username = $request->username;
+                $model->password = md5($request->password);
                 $model->id_divisi = $request->divisi;
                 $model->id_jabatan = $request->jabatan;
                 $model->is_delete = 0;
@@ -51,6 +54,8 @@ class KaryawanController extends Controller
             DB::beginTransaction();
             try{
                 $model->nama_karyawan = $request->nama;
+                $model->username = $request->username;
+                $model->password = md5($request->password);
                 $model->id_divisi = $request->divisi;
                 $model->id_jabatan = $request->jabatan;
 
