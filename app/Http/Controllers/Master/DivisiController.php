@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Master\Divisi; 
 use App\Models\Master\Jabatan; 
 use DB;
 
-class DivisiController extends Controller
+class DivisiController extends BaseController
 {
     public function index(){
         $title = 'Master Data Divisi';

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Setting;
 
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Setting\UnitKerja;
 use DB;
 
-class UnitKerjaController extends Controller
+class UnitKerjaController extends BaseController
 {
     public function index()
     {

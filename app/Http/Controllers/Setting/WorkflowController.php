@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Setting;
 
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\Setting\Workflow;
 
-class WorkflowController extends Controller
+class WorkflowController extends BaseController
 {
     public function index()
     {

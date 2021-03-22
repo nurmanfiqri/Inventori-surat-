@@ -50,9 +50,6 @@ Route::group(['middleware' => 'authLogin'], function () {
         Route::group(['prefix' => 'role'], function () {
             Route::get('/list', 'Api\ApiRoleController@list');
         });
-        Route::group(['prefix' => 'master'], function () {
-            Route::get('/divisi', 'Api\ApiRoleController@list');
-        });
         Route::group(['prefix' => 'setting'], function () {
             Route::get('/role', 'Api\ApiRoleController@list');
         });
@@ -170,6 +167,7 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::get('/update/{id}', 'Setting\UserController@update');
             Route::post('/update/{id}', 'Setting\UserController@update');
             Route::post('/delete/{id}', 'Setting\UserController@delete');
+            Route::get('/editView/{id}', 'Setting\UserController@editView');
         });
 
         Route::group(['prefix' => 'role'], function () {

@@ -34,6 +34,18 @@
     <link rel="stylesheet" href="{{url('template/plugins/select2/css/select2.min.css')}}">
     <link rel="stylesheet" href="{{url('template/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+<style>
+  .session-page{
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+  }
+  .text-session{
+    color: darkgrey;
+  }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -49,57 +61,9 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge"></span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
-            <div class="media">
-              <img src="{{asset('template/')}}/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Brad Diesel
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <div class="media">
-              <img src="{{asset('template/')}}/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  John Pierce
-                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">I got your message bro</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <div class="media">
-              <img src="{{asset('template/')}}/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Nora Silvester
-                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">The subject goes here</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-        </div>
-      </li>
+      <div class="session-page">
+          <span class="text-session">{{Session::get('nama')}} ({{Session::get('jabatan')}})</span>
+      </div>
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -173,16 +137,74 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      {{-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           <img src="{{asset('template/')}}/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{Session::get('username')}}</a>
         </div>
-      </div>
+      </div> --}}
 
-      @include('layout.menu')
+      {{-- @include('layout.menu') --}}
+
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+            @php
+             $currentUrl = explode('/', Route::getCurrentRoute()->uri());
+             $countEndPoint = count($currentUrl);
+            ($countEndPoint == 2) ? $currentUrl = isset($currentUrl) ? $currentUrl[0].'/'.$currentUrl[1] : '' : $currentUrl = isset($currentUrl) ? '/'.$currentUrl[0] : ''; 
+            // dd($currentUrl);
+            @endphp
+            @if(isset($menuList))
+            @foreach ($menuList as $key => $r)
+              @if($r->parent == 0 && $r->link == '#')
+              <li class="nav-item has-treeview" id="collapse-{{$key}}">
+                <a href="#" class="nav-link">
+                  <ion-icon class="nav-icon" name="{{$r->icon}}"></ion-icon>
+                  <p>
+                    {{$r->title}}
+                    <i class="right fas fa-angle-right"></i>
+                  </p>
+                </a>
+    
+                @if($r->sub_menu2)
+                <ul class="nav nav-treeview">
+                  @foreach ($r->sub_menu2 as $s)
+                  <li class="nav-item ">
+                    <a href="{{url($s->link)}}"
+                      class="nav-link {{$currentUrl == $s->link ? 'active' : ''}} ml-4">
+                      <ion-icon name="{{$s->icon}}"></ion-icon>
+                      <p>{{$s->title}}</p>
+                    </a>
+                  </li>
+                  @if($currentUrl == $s->link)
+                  <script>
+                    $('#collapse-{{$key}}').addClass('menu-open');
+                  </script>
+                  @endif
+                  @endforeach
+                </ul>
+                @endif
+    
+              </li>
+              @else
+              <li class="nav-item">
+                <a href="{{url('dashboard')}}" class="nav-link">
+                  <ion-icon class="nav-icon" name="analytics-outline"></ion-icon>
+                  <p>
+                    Dashboard
+                  </p>
+                </a>
+              </li>
+              @endif
+              @endforeach
+            @endif
+        </ul>
+      </nav>
+    
 
     </div>
     <!-- /.sidebar -->
@@ -256,6 +278,7 @@
 
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
 <script>
+  
   $(function() {
       $("#example1").DataTable();
       $('#example2').DataTable({

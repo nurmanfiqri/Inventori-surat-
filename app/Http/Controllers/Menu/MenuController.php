@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Menu;
 
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\Menu\MenuModel;
 
-class MenuController extends Controller
+class MenuController extends BaseController
 {
     public function index()
     {
