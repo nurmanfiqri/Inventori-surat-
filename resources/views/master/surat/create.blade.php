@@ -18,8 +18,11 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">File Surat</label>
-                    <input type="file" class="form-control" placeholder="File Surat" name="file">{{isset($model) ? $model->file : ''}}</input>
+                    <input type="file" class="form-control" placeholder="File Surat" onchange="loadFile(event)" name="file">{{isset($model) ? $model->file : ''}}</input>
                 </div>
+
+                <embed type="application/pdf" width="600" height="400" id="output"/>
+
                 <div class="">
                     <button type="submit" class="btn btn-success">Simpan</button>
                 </div>
@@ -31,4 +34,13 @@
   </section>
   <!-- /.content -->
 
+@endsection
+
+@section('script')
+    <script>
+      var loadFile = function(event) {
+          var output = document.getElementById('output');
+          output.src = URL.createObjectURL(event.target.files[0]);
+      }
+    </script>
 @endsection

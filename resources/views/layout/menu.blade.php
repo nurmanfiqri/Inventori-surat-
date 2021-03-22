@@ -11,27 +11,24 @@
         </a>
       </li>
   
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a href="{{url ('/user')}}" class="nav-link {{ request()->is('user') ? 'active' : '' }}">
           <ion-icon class="nav-icon" name="people-outline"></ion-icon>
-          {{-- <i class="nav-icon fas fa-th"></i> --}}
           <p>User</p>
         </a>
       </li>
       <li class="nav-item">
         <a href="{{url ('/role')}}" class="nav-link {{ request()->is('role') ? 'active' : '' }}">
           <ion-icon class="nav-icon" name="key-outline"></ion-icon>
-          {{-- <i class="nav-icon fas fa-th"></i> --}}
           <p>Role</p>
         </a>
-      </li>
-      <li class="nav-item">
+      </li> --}}
+      {{-- <li class="nav-item">
         <a href="{{url ('/menu')}}" class="nav-link {{ request()->is('menu') ? 'active' : '' }}">
           <ion-icon class="nav-icon" name="menu-outline"></ion-icon>
-          {{-- <i class="nav-icon fas fa-th"></i> --}}
           <p>Menu</p>
         </a>
-      </li>
+      </li> --}}
      
       <li class="nav-item">
         <a href="{{url ('master/surat')}}" class="nav-link {{ request()->is('master/surat') ? 'active' : '' }}">
@@ -53,13 +50,12 @@
           {{-- <i class="nav-icon fas fa-th"></i> --}}
           <p>Approval Log</p>
         </a>
-      </li>
+      {{-- </li>
         <a href="{{url ('/logout')}}" class="nav-link">
           <ion-icon class="nav-icon" name="log-out-outline"></ion-icon>
-          {{-- <i class="nav-icon fas fa-th"></i> --}}
           <p>Logout</p>
         </a>
-      </li>
+      </li> --}}
 
       <!--- Setting Approval --->
       <li class="nav-item has-treeview">
