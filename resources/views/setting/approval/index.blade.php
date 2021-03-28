@@ -35,7 +35,6 @@
               <tr>
                 <th>No</th>
                 <th>Workflow</th>
-                <th>Status</th>
                 <th>Aksi</th>
               </tr>
               </thead>
@@ -92,8 +91,7 @@
               },
               columns:[
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                {data: 'nama', name: 'nama'},
-                {data: 'status', name: 'status'},
+                {data: 'nama_workflow', name: 'nama_workflow'},
                 {data: 'aksi', name: 'aksi'}
               ],
               order: [

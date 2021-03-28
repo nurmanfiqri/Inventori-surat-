@@ -14,6 +14,13 @@ class BaseController extends Controller
 {
     public function __construct()
     {
+        $id_karyawan = Session::get('id_karyawan');
+        $inbox = DB::select("select a.id, a.file, a.tanggal, 'url' from master a join approver_list c on a.id = c.document_id and (a.apv_level + 1) = c.apv_level where a.doc_status <> 'Completed' and a.doc_status <> 'Draft' and c.user_id = '$id_karyawan'");
+
+        $count = count($inbox);
+
+        // dd($count);
+
         $role_id = Session::get('id_role');
         // dd($role_id);
             $menu = MenuModel::where(['parent' => '0'])
@@ -27,5 +34,6 @@ class BaseController extends Controller
                 ->get();
   
         View::share('menuList', $menu);
+        View::share('inbox', $count);
     }
 }

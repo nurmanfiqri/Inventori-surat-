@@ -47,11 +47,17 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::get('/karyawan', 'Api\ApiMasterController@karyawan');
         });
 
+        Route::get('approver-log/list/{id}', 'Api\ApiApprovalController@approverLog');
+        Route::get('approver/list/{id}', 'Api\ApiApprovalController@approverList');
+
         Route::group(['prefix' => 'role'], function () {
             Route::get('/list', 'Api\ApiRoleController@list');
         });
         Route::group(['prefix' => 'setting'], function () {
             Route::get('/role', 'Api\ApiRoleController@list');
+        });
+        Route::group(['prefix' => 'setting'], function () {
+            Route::get('/role-akses', 'Api\ApiRoleController@roleAkses');
         });
     });
 
@@ -66,6 +72,9 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::get('/update/{id}', 'Master\MasterController@update');
             Route::post('/update/{id}', 'Master\MasterController@update');
             Route::post('/delete/{id}', 'Master\MasterController@delete');
+            Route::post('/submit/{id}', 'Master\MasterController@submit');
+            Route::post('/approve/{id}', 'Master\MasterController@approve');
+            Route::get('/view/{id}', 'Master\MasterController@view');
         });
 
         Route::group(['prefix' => 'divisi'], function () {
@@ -101,6 +110,10 @@ Route::group(['middleware' => 'authLogin'], function () {
         Route::group(['prefix' => 'setting'], function () {
             Route::get('/userlist', 'Api\ApiUserController@list');
         });
+
+        Route::get('getInbox', 'Api\ApiInboxController@ct_inbox');
+
+        Route::get('dataInbox', 'Admin\HomeController@dataInbox');
     });
 
     // Halaman approval list
@@ -113,10 +126,6 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::post('/update/{id}', 'Approval\ListController@update');
             Route::post('/delete/{id}', 'Approval\ListController@delete');
         });
-    });
-
-    Route::group(['prefix' => 'api/'], function () {
-      
     });
 
     //Halaman Approval Log
@@ -133,9 +142,13 @@ Route::group(['middleware' => 'authLogin'], function () {
 
         Route::group(['prefix' => 'select2'], function () {
             Route::get('/divisi', 'Api\ApiSelect2Controller@divisi');
+            Route::get('/divisiLine', 'Api\ApiSelect2Controller@divisiLine');
             Route::get('/jabatan', 'Api\ApiSelect2Controller@jabatan');
+            Route::get('/jabatanLine', 'Api\ApiSelect2Controller@jabatanLine');
             Route::get('/user', 'Api\ApiSelect2Controller@user');
             Route::get('/role', 'Api\ApiSelect2Controller@role');
+            Route::get('/unit', 'Api\ApiSelect2Controller@unit');
+            Route::get('/karyawan', 'Api\ApiSelect2Controller@karyawan');
             ///lanjuut dari sisi
         });
     });
@@ -147,8 +160,10 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::get('/create', 'Setting\WorkflowController@create');
             Route::post('/create', 'Setting\WorkflowController@create');
             Route::get('/update/{id}', 'Setting\WorkflowController@update');
+            Route::get('/view/{id}', 'Setting\WorkflowController@view');
             Route::post('/update/{id}', 'Setting\WorkflowController@update');
             Route::post('/delete/{id}', 'Setting\WorkflowController@delete');
+
         });
 
         Route::group(['prefix' => 'unit_kerja'], function () {
@@ -179,6 +194,16 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::post('/delete/{id}', 'Role\RoleController@delete');
             Route::get('/view/{id}', 'Role\RoleController@view');
         });
+
+        Route::group(['prefix' => 'role-akses'], function () {
+            Route::get('/', 'Role\RoleAksesController@index')->name('role');
+            Route::get('/create', 'Role\RoleAksesController@create')->name('createrole');
+            Route::post('/create', 'Role\RoleAksesController@create')->name('createrole');
+            Route::get('/update/{id}', 'Role\RoleAksesController@update');
+            Route::post('/update/{id}', 'Role\RoleAksesController@update');
+            Route::post('/delete/{id}', 'Role\RoleAksesController@delete');
+            Route::get('/view/{id}', 'Role\RoleAksesController@view');
+        });
     });
 
     Route::group(['prefix' => 'api/'], function () {
@@ -187,6 +212,9 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::get('/unitkerja', 'Api\ApiApprovalController@unitkerja');
         });
     });
+
+    Route::get('notifikasi', 'Admin\HomeController@notifikasi');
+   
 });
 
 

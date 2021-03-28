@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Approval\ApprovalModel;
+use App\Models\Setting\ApproverList;
+use App\Models\Setting\ApproverLog;
 use App\Models\Setting\Workflow;
 use App\Models\Setting\UnitKerja;
 
@@ -83,6 +85,8 @@ class ApiApprovalController extends Controller
                         <i class="fas fa-fw fa-trash"></i> Hapus
                     </button>';
                 $button .= '&nbsp';
+                $button .= '<a href="' . url("setting/workflow/view/" . $data->id) . '" title = "Edit" data-id="' . $data->id . '" class="btn btn-info btn-sm"> <i class="fas fa-search"></i> Detail</a>';
+                $button .= '&nbsp';
 
                 return $button;
             })
@@ -118,5 +122,24 @@ class ApiApprovalController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
+    }
+
+    public function approverLog(Request $request){
+        $model = ApproverLog::with('profile', 'divisi', 'jabatan')->where([
+            'document_id' => $request->id, 'document' => $request->document, 'kategori' => $request->kategori
+        ])
+        ->orderby('created_at', 'desc')->get();
+
+        return $model;
+    }
+
+    public function approverList(Request $request){
+        // dd($request->all());
+        $model = ApproverList::with('profile', 'divisi', 'jabatan')->where([
+            'document_id' => $request->id, 'document' => $request->document, 
+        ])->orderby('created_at', 'desc')->get();
+        
+        // dd($model);
+        return $model;
     }
 }

@@ -8,28 +8,62 @@ use Yajra\DataTables\DataTables;
 use App\Models\Master\MasterModel;
 use App\Models\Master\Divisi;
 use App\Models\Master\Karyawan;
+use App\Helpers\UtilApproval;
+use App\Helpers\UtilDate;
 
 class ApiMasterController extends Controller
 {
-    public function list()
+    public function list(Request $request)
     {
-        $list = MasterModel::where('is_delete', 0)->get();
-        // dd($list);
-        return DataTables::of($list)
-            ->addIndexColumn()
-            ->addColumn('aksi', function ($data) {
-                $button = '';
-                $button .= '<a href="' . url("master/surat/update/" . $data->id) . '" title = "Edit" data-id="' . $data->id . '" class="btn btn-primary btn-sm"> <i class="fas fa-edit"></i> Edit</a>';
-                $button .= '&nbsp';
-                $button .= '<button type="button" title="Hapus" data-id="' . $data->id . '" onclick="hapus(' . $data->id . ')" class="btn btn-warning btn-sm"> 
-                            <i class="fas fa-fw fa-trash"></i> Hapus
-                        </button>';
-                $button .= '&nbsp';
+        $start = $request->from_date;
+        $end = $request->to_date;
+        $Start = UtilDate::format($start , 'd/m/Y', 'Y-m-d');
+        $End = UtilDate::format($end, 'd/m/Y', 'Y-m-d');
+  
+        $role = $request->session()->get('role');
+        // dd($role);
+        if($role == 'admin'){
+            $model = MasterModel::where([
+                ['is_delete', 0],
+                ['doc_status', '!=', 'Draft']
+            ])
+            ->whereBetween('tanggal', [$Start, $End])
+            ->orderby('id', 'desc')
+            ->get();
+        } else if($role == 'user' || $role == 'super admin'){
+            $model = MasterModel::where([
+                ['is_delete', 0],
+            ])
+            ->whereBetween('tanggal', [$Start, $End])
+            ->orderby('id', 'desc')
+            ->get();
+        }
 
-                return $button;
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
+        $datatables = DataTables::of($model)
+        ->addIndexColumn()
+        ->addColumn('unit', function($data){
+            return $data->approver->nama_workflow;
+        });
+
+        $datatables = UtilApproval::approvalVisibility($datatables, 'Surat Masuk');
+
+        return $datatables->make(true);
+        // dd($list);
+        // return DataTables::of($list)
+        //     ->addIndexColumn()
+        //     ->addColumn('aksi', function ($data) {
+        //         $button = '';
+        //         $button .= '<a href="' . url("master/surat/update/" . $data->id) . '" title = "Edit" data-id="' . $data->id . '" class="btn btn-primary btn-sm"> <i class="fas fa-edit"></i> Edit</a>';
+        //         $button .= '&nbsp';
+        //         $button .= '<button type="button" title="Hapus" data-id="' . $data->id . '" onclick="hapus(' . $data->id . ')" class="btn btn-warning btn-sm"> 
+        //                     <i class="fas fa-fw fa-trash"></i> Hapus
+        //                 </button>';
+        //         $button .= '&nbsp';
+
+        //         return $button;
+        //     })
+        //     ->rawColumns(['aksi'])
+        //     ->make(true);
     }
 
     public function Api(Request $request)

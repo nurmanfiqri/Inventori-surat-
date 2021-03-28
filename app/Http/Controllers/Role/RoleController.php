@@ -38,7 +38,7 @@ class RoleController extends BaseController
                 ]);
 
                 if($validator->fails()){
-                    $error = $validator->messages();
+                    $error = $validator->message();
                 }
 
                 $model->role = strtolower($request->role);
@@ -56,7 +56,7 @@ class RoleController extends BaseController
                 }
 
                 if(isset($error)){
-                    return view('setting.role.create', compat('model', 'menu'));
+                    return view('setting.role.create', compact('model', 'menu'));
                 }
 
                 DB::commit();
