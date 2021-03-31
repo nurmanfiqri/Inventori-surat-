@@ -281,7 +281,16 @@
   @include('layout.judul')
 
   @yield('content')  
-
+  @if(Session::has('success'))
+    <script type="text/javascript">
+      	$.alert('Data berhasil disimpan');
+    </script>
+  @endif
+  @if(Session::has('fail'))
+  <script type="text/javascript">
+    $.alert('Terjadi kesalahan saat menyimpan data, silahkan coba lagi nanti');
+</script>
+@endif
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">

@@ -38,7 +38,7 @@ class KaryawanController extends BaseController
                 $model->save();
                 DB::commit();
 
-                return redirect('master/karyawan/view/'.$model->id)->with(['success' => 'Data berhasil disimpan']);
+                return redirect('master/karyawan/view/'.$model->id)->withSuccess('Success message');
             } catch(\Exception $e){
                 DB::rollBack();
                 return $e;

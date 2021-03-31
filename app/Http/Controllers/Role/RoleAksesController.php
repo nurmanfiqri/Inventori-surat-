@@ -29,7 +29,7 @@ class RoleAksesController extends BaseController
                 
                 $model->save();
                 DB::commit();
-                return redirect('setting/role-akses/view/'.$model->id)->with(['success' => 'Data berhasil ditambahkan']);
+                return redirect('setting/role-akses/view/'.$model->id)->withSuccess('Success message');
             } catch(\Exception $e){
                 DB::rollBack();
                 return $e;
@@ -57,7 +57,7 @@ class RoleAksesController extends BaseController
                 
                 $model->save();
                 DB::commit();
-                return redirect('setting/role-akses/view/'.$model->id)->with(['success' => 'Data berhasil ditambahkan']);
+                return redirect('setting/role-akses/view/'.$model->id)->withSuccess('Success message');
             } catch(\Exception $e){
                 DB::rollBack();
                 return $e;

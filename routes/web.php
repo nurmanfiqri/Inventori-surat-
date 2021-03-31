@@ -75,6 +75,7 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::post('/submit/{id}', 'Master\MasterController@submit');
             Route::post('/approve/{id}', 'Master\MasterController@approve');
             Route::get('/view/{id}', 'Master\MasterController@view');
+            Route::post('/reject/{id}', 'Master\MasterController@reject');
         });
 
         Route::group(['prefix' => 'divisi'], function () {

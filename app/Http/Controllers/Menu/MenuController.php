@@ -30,7 +30,7 @@ class MenuController extends BaseController
                 $model->is_delete = 0;
                 $model->save();
                 DB::commit();
-                return redirect('menu')->with(['success' => 'Informasi baru berhasil disimpan']);
+                return redirect('menu')->->withSuccess('Success message');
             } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
@@ -53,7 +53,7 @@ class MenuController extends BaseController
 
                 $model->update();
                 DB::commit();
-                return redirect('menu')->with(['success' => 'Data Berhasil di Update']);
+                return redirect('menu')->withSuccess('Success message');
             } catch (\Exceptopn $e) {
                 DB::rollBack();
                 return $e;

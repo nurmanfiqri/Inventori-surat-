@@ -187,6 +187,59 @@
         });
 	}
 
+	function reject(param){
+		$.confirm({
+		title: 'Keterangan',
+		content: '' +
+
+		'<label>Masukan Alasan Penolakan</label>' +
+		'<textarea placeholder="Contoh : Typo Judul Surat" class="name form-control" id="keterangan" required </textarea>'
+		,
+		buttons: {
+			formSubmit: {
+				text: 'Submit',
+				btnClass: 'btn-blue',
+				action: function () {
+					var name = this.$content.find('textarea#keterangan').val();
+					if(!name){
+						$.alert('provide a valid name');
+						return false;
+					}
+					$.ajax({
+						url: `{{url('master/${url}/reject/${param}')}}`,
+						type: "POST",
+						dataType: "JSON",
+						data: {
+							keterangan : name,
+							"_token": "{{ csrf_token() }}",
+						},
+						success: function(res){
+							$.alert(res.message);
+                        	$("#"+tabel).DataTable().ajax.reload();
+						},
+						error: function(res,err){
+							$.alert('Terjadi kesalahan, silahkan coba lagi nanti');
+							console.log(error);
+						}
+					});
+				}
+			},
+			cancel: function () {
+				//close
+			},
+		},
+		onContentReady: function () {
+			// bind to events
+			var jc = this;
+			this.$content.find('form').on('submit', function (e) {
+				// if the user submits the form by pressing enter in the field.
+				e.preventDefault();
+				jc.$$formSubmit.trigger('click'); // reference the button and click it
+			});
+    	}
+	});
+	}
+
 
 </script>
 

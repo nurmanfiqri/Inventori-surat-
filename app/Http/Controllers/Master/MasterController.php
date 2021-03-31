@@ -63,7 +63,7 @@ class MasterController extends BaseController
                 $model->url_file = $request->file ? $pathGbr : $model->url_file;
                 $model->save();
                 DB::commit();
-                return redirect('master/surat/view/'.$model->id)->with(['success' => 'Informasi baru berhasil disimpan']);
+                return redirect('master/surat/view/'.$model->id)->withSuccess('Success message');
             } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
@@ -102,10 +102,12 @@ class MasterController extends BaseController
                     $model->file = $model->file;
                 }
                 $model->is_delete = 0;
+                $model->doc_status = 'Draft';
+                $model->apv_level = 0;
                 $model->url_file = $request->file ? $pathGbr : $model->url_file;
                 $model->update();
                 DB::commit();
-                return redirect('master/surat')->with(['success' => 'Data Berhasil di Update']);
+                return redirect('master/surat')->withSuccess('Success message');
             } catch (\Exceptopn $e) {
                 DB::rollBack();
                 return $e;
@@ -188,5 +190,20 @@ class MasterController extends BaseController
             'message' => 'Document beerhasil di Approve',
         ]);
         
+    }
+
+    public function reject(Request $request, $id){
+        $keterangan = $request->keterangan;
+        $model = MasterModel::where(['id' => $id])->first();
+        $approver = UtilApproval::approvalLog('Surat Masuk', $model, 'Rejected', $keterangan, 'Surat Masuk');
+
+        $model->doc_status = 'Rejected';
+        $model->apv_level = -1;
+        $model->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Document berhasil disimpan'
+        ]);
     }
 }

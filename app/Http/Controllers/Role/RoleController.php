@@ -61,7 +61,7 @@ class RoleController extends BaseController
 
                 DB::commit();
 
-                return redirect('setting/role/view/'.$model->id)->with(['success' => 'Role baru berhasil ditambahkan']);
+                return redirect('setting/role/view/'.$model->id)->withSuccess('Success message');
             } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
@@ -110,7 +110,7 @@ class RoleController extends BaseController
                 }
 
                 DB::commit();
-                return redirect('setting/role/view/'.$model->id)->with(['success' => 'Data berhasil diupdate']);
+                return redirect('setting/role/view/'.$model->id)->withSuccess('Success message');
             }catch(\Exception $e){
                 DB::rollBack();
                 return $e;

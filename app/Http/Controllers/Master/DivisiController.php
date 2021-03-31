@@ -53,7 +53,7 @@ class DivisiController extends BaseController
                     }
 
                     DB::commit();
-                    return redirect('master/divisi/view/'.$model->id)->with(['success' => 'Data berhasil disimpan']);
+                    return redirect('master/divisi/view/'.$model->id)->withSuccess('Success message');
                 }
             } catch(\Exception $e){
                 DB::rollBack();

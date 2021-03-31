@@ -30,7 +30,7 @@ class UnitKerjaController extends BaseController
                 $model->is_delete = 0;
                 $model->save();
                 DB::commit();
-                return redirect('setting/unit_kerja')->with(['success' => 'Informasi baru berhasil disimpan']);
+                return redirect('setting/unit_kerja')->withSuccess('Success message');
             } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
@@ -52,8 +52,8 @@ class UnitKerjaController extends BaseController
 
                 $model->update();
                 DB::commit();
-                return redirect('setting/unit_kerja')->with(['success' => 'Data Berhasil di Update']);
-            } catch (\Exceptopn $e) {
+                return redirect('setting/unit_kerja')->withSuccess('Success message');
+            } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
             }
