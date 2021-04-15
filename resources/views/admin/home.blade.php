@@ -1,4 +1,4 @@
-@extends('layout.app')
+{{-- @extends('layout.app')
 @section('title', 'Dashboard')
 @section('content')
 
@@ -73,5 +73,35 @@
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
+
+@endsection --}}
+{{-- Extends layout --}}
+@extends('layout.default')
+
+{{-- Content --}}
+@section('content')
+<style>
+    td.no-wrap {
+        white-space: nowrap !important;
+    }
+</style>
+<div class="card card-custom">
+    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+        <div class="card-title">
+            <h3 class="card-label">Selamat datang, {{Session::get('nama')}}.</h3>
+        </div>
+        <div class="card-toolbar">
+
+            <!--end::Dropdown-->
+            <!--begin::Button-->
+            {{-- <a href="#" class="btn btn-primary font-weight-bolder">
+                <span class="svg-icon svg-icon-md">
+                    <i class="fa fa-plus icon-md"></i>
+                </span>Tambah Data</a> --}}
+            <!--end::Button-->
+        </div>
+    </div>
+
+</div>
 
 @endsection

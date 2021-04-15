@@ -215,6 +215,8 @@ Route::group(['middleware' => 'authLogin'], function () {
     });
 
     Route::get('notifikasi', 'Admin\HomeController@notifikasi');
+
+    Route::get('/quick-search', 'PagesController@quickSearch')->name('quick-search');
    
 });
 

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Inventori Surat'),
 
     /*
     |--------------------------------------------------------------------------
@@ -228,6 +228,11 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'format_date' => App\Helpers\UtilDate::class,
+
+          // Metronic Aliases
+          'Metronic' => App\Classes\Theme\Metronic::class,
+          'Menu' => App\Classes\Theme\Menu::class,
+  
 
     ],
 
