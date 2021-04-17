@@ -353,6 +353,7 @@
 
   $(document).ready(function(){
     var pesan = $('#inbox').text();
+    inbox();
     setInterval(inbox, 60000);
 
     dataInbox();
