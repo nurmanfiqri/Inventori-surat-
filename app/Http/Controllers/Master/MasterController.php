@@ -8,6 +8,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\Master\MasterModel;
+use App\Models\Setting\FolderSurat;
+use App\Models\Setting\JenisSurat;
+use App\Models\Setting\PrioritasSurat;
+use App\Models\Setting\SifatSurat;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Date;
@@ -22,11 +26,16 @@ class MasterController extends BaseController
 
     public function create(Request $request)
     {
-        // dd($request->all());
+
         $model = new MasterModel();
+        $jenis = JenisSurat::where('is_delete', '0')->get();
+        $sifat = SifatSurat::where('is_delete', '0')->get();
+        $prioritas = PrioritasSurat::where('is_delete', '0')->get();
+        $folder = FolderSurat::where('is_delete', '0')->get();
 
         $user = $request->session()->get('user_id');
         if ($request->isMethod('post')) {
+            // dd($request->all());
             DB::beginTransaction();
             try {
 
@@ -35,8 +44,8 @@ class MasterController extends BaseController
                     'image' => 'mimes:jpg, png, jpeg'
                 ]);
 
-                if($validator->fails()){
-                   return redirect('master/surat/create')->with(['error' => 'Tipe File / Ukuran tidak sesuai']);
+                if ($validator->fails()) {
+                    return redirect('master/surat/create')->with(['error' => 'Tipe File / Ukuran tidak sesuai']);
                 }
 
                 // dd($request->all());
@@ -46,9 +55,9 @@ class MasterController extends BaseController
                     $path = $request->file;
                     $file = $path;
                     $fileName = str_replace(' ', '_', $file->getClientOriginalName());
-                    $fileName = 'Document_'.date('YmdHis').'_'.$fileName;
+                    $fileName = 'Document_' . date('YmdHis') . '_' . $fileName;
                     $save = $file->storeAs('public/file/', $fileName);
-                    $pathGbr = url('/storage/file/').'/'.$fileName;
+                    $pathGbr = '/storage/file/' . $fileName;
 
                     $model->file = $fileName;
                 } else {
@@ -61,42 +70,48 @@ class MasterController extends BaseController
                 $model->tanggal = date('Y-m-d');
                 $model->apv_level = 0;
                 $model->url_file = $request->file ? $pathGbr : $model->url_file;
+                $model->instansi = $request->instansi;
+                $model->id_jenis_surat = $request->jenis_surat;
+                $model->id_sifat_surat = $request->sifat_surat;
+                $model->id_prioritas_surat = $request->prioritas_surat;
+                $model->id_folder_surat = $request->folder_surat;
                 $model->save();
+                $submit = $this->submit($model->id);
                 DB::commit();
-                return redirect('master/surat/view/'.$model->id)->withSuccess('Success message');
+                return redirect('master/surat/view/' . $model->id)->withSuccess('Success message');
             } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
             }
         }
-        return view('master.surat.create');
+        return view('master.surat.create', compact('jenis', 'sifat', 'prioritas', 'folder'));
     }
 
     public function update(Request $request)
     {
         $model = MasterModel::query()->where(['id' => $request->id])->first();
-   
+
         $title = 'Update Informasi';
         if ($request->isMethod('post')) {
             DB::beginTransaction();
             try {
                 $model = MasterModel::find($request->id);
                 $model->nama = $request->nama;
-                
+
                 if ($request->file) {
                     $basePath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
                     $path = $request->file;
                     // dd($basePath);
-                    $pathOld = $basePath . 'public/file/'.$model->file;
+                    $pathOld = $basePath . 'public/file/' . $model->file;
                     // dd($pathOld);
                     unlink($pathOld);
                     $file = $path;
                     $fileName = str_replace(' ', '_', $file->getClientOriginalName());
-                    $fileName = 'Document_'.date('YmdHis').'_'.$fileName;
+                    $fileName = 'Document_' . date('YmdHis') . '_' . $fileName;
                     $save = $file->storeAs('public/file/', $fileName);
-                   
-                    $pathGbr = url('/storage/file/').'/'.$fileName;
-                   
+
+                    $pathGbr = '/storage/file/' . $fileName;
+
                     $model->file = $fileName;
                 } else {
                     $model->file = $model->file;
@@ -105,20 +120,25 @@ class MasterController extends BaseController
                 $model->doc_status = 'Draft';
                 $model->apv_level = 0;
                 $model->url_file = $request->file ? $pathGbr : $model->url_file;
+                $model->id_jenis_surat = $request->jenis_surat;
+                $model->id_sifat_surat = $request->sifat_surat;
+                $model->id_prioritas_surat = $request->prioritas_surat;
+                $model->id_folder_surat = $request->folder_surat;
                 $model->update();
                 DB::commit();
                 return redirect('master/surat')->withSuccess('Success message');
-            } catch (\Exceptopn $e) {
+            } catch (\Exception $e) {
                 DB::rollBack();
                 return $e;
-
             }
         }
         return view('master..surat.create', compact('title', 'model'));
     }
 
-    public function view(Request $request, $id){
+    public function view(Request $request, $id)
+    {
         $model = MasterModel::where(['id' => $id])->first();
+        // dd($model->id);
 
         return view('master.surat.view', compact('model'));
     }
@@ -145,12 +165,14 @@ class MasterController extends BaseController
         ]);
     }
 
-    public function submit(Request $request, $id){
+    public function submit($id)
+    {
+        $role = Session::get('role');
         $model = MasterModel::where(['id' => $id])->first();
         $approverList = UtilApproval::getApprover('Surat Masuk', $model, 'Surat Masuk');
-        $approverLog = UtilApproval::approvalLog('Surat Masuk', $model, 'Submitted', 'Approval Surat Masuk', 'Surat Masuk');
+        $approverLog = UtilApproval::approvalLog('Surat Masuk', $model, 'Submitted', 'Diteruskan Oleh ' . $role, 'Surat Masuk');
 
-        if($approverList){
+        if ($approverList) {
             $model->doc_status = 'Submitted';
             $model->save();
 
@@ -166,20 +188,23 @@ class MasterController extends BaseController
         }
     }
 
-    public function approve(Request $request, $id){
+    public function approve(Request $request, $id)
+    {
         $model = MasterModel::where(['id' => $id])->first();
         $maxApprover = UtilApproval::getMaxApprover('Surat Masuk', $model, 'Surat Masuk');
+
+        $role = Session::get('role');
 
         $level = $model->apv_level + 1;
 
         $docStatus = '';
-        if($level == $maxApprover){
+        if ($level == $maxApprover) {
             $docStatus = 'Completed';
         } else {
             $docStatus = 'In Progress';
         }
         // dd($docStatus);
-        $approverLog = UtilApproval::approvalLog('Surat Masuk', $model, $docStatus, '-', 'Surat Masuk');
+        $approverLog = UtilApproval::approvalLog('Surat Masuk', $model, $docStatus, 'Diteruskan Oleh ' . $role, 'Surat Masuk');
 
         $model->doc_status = $docStatus;
         $model->apv_level = $level;
@@ -189,10 +214,10 @@ class MasterController extends BaseController
             'status' => 200,
             'message' => 'Document beerhasil di Approve',
         ]);
-        
     }
 
-    public function reject(Request $request, $id){
+    public function reject(Request $request, $id)
+    {
         $keterangan = $request->keterangan;
         $model = MasterModel::where(['id' => $id])->first();
         $approver = UtilApproval::approvalLog('Surat Masuk', $model, 'Rejected', $keterangan, 'Surat Masuk');
@@ -205,5 +230,16 @@ class MasterController extends BaseController
             'status' => 200,
             'message' => 'Document berhasil disimpan'
         ]);
+    }
+
+    public function download($id)
+    {
+        $model = MasterModel::query()->where(['id' => $id])->first();
+
+        $role = Session::get('role');
+
+        $approver = UtilApproval::approvalLog('Surat Masuk', $model, 'Downloaded', 'File di Diunduh Oleh  ' . $role, 'Surat Masuk');
+
+        return Storage::download($model->url_file, $model->file);
     }
 }

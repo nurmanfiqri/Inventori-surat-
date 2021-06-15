@@ -354,9 +354,10 @@
   $(document).ready(function(){
     var pesan = $('#inbox').text();
     inbox();
-    setInterval(inbox, 60000);
-
     dataInbox();
+    setInterval(inbox, 60000);
+    setInterval(dataInbox, 60000);
+
   });
 
 </script>

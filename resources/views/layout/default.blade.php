@@ -25,6 +25,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
         {{-- Favicon --}}
         <link rel="shortcut icon" href="{{ asset('media/logos/favicon.ico') }}" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css"/>
 
         {{-- Fonts --}}
         {{ Metronic::getGoogleFontsInclude() }}
@@ -64,6 +65,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
         <script src="{{asset('js/inputmask/inputmask.js')}}"></script>
         <script src="{{asset('js/inputmask/jquery.inputmask.js')}}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 
         <script>
             $.ajaxSetup({

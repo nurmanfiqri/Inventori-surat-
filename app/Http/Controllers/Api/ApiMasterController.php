@@ -17,33 +17,32 @@ class ApiMasterController extends Controller
     {
         $start = $request->from_date;
         $end = $request->to_date;
-        $Start = UtilDate::format($start , 'd/m/Y', 'Y-m-d');
+        $Start = UtilDate::format($start, 'd/m/Y', 'Y-m-d');
         $End = UtilDate::format($end, 'd/m/Y', 'Y-m-d');
-  
+
+        // dd($Start);
         $role = $request->session()->get('role');
-        // dd($role);
-        if($role == 'admin'){
+
+        if ($role == 'admin') {
             $model = MasterModel::where([
                 ['is_delete', 0],
-                ['doc_status', '!=', 'Draft']
+                // ['doc_status', '!=', 'Draft']
             ])
-            ->whereBetween('tanggal', [$Start, $End])
-            ->orderby('id', 'desc')
-            ->get();
-        } else if($role == 'user' || $role == 'super admin'){
+                ->whereBetween('tanggal', [$Start, $End])
+                ->orderby('id', 'desc')
+                ->get();
+        } else if ($role == 'user' || $role == 'super admin') {
             $model = MasterModel::where([
                 ['is_delete', 0],
             ])
-            ->whereBetween('tanggal', [$Start, $End])
-            ->orderby('id', 'desc')
-            ->get();
+                ->whereBetween('tanggal', [$Start, $End])
+                ->orderby('id', 'desc')
+                ->get();
         }
 
+        // dd($model);
         $datatables = DataTables::of($model)
-        ->addIndexColumn()
-        ->addColumn('unit', function($data){
-            return $data->approver->nama_workflow;
-        });
+            ->addIndexColumn();
 
         $datatables = UtilApproval::approvalVisibility($datatables, 'Surat Masuk');
 
@@ -84,57 +83,59 @@ class ApiMasterController extends Controller
     }
 
     ///Datatable Divisi & Jabatan
-    public function divisi(Request $request){
+    public function divisi(Request $request)
+    {
         $list = Divisi::where('is_delete', 0)->with('jabatan')->get();
         // dd($list);
         return DataTables::of($list)
-        ->addIndexColumn()
-        ->addColumn('aksi', function ($data) {
-            $button = '';
-            $button .= '<a href="' . url("master/divisi/update/" . $data->id) . '" title = "Edit" data-id="' . $data->id . '" class="btn btn-warning btn-sm"> <i class="fas fa-edit"></i> Edit</a>';
-            $button .= '&nbsp';
-            $button .= '&nbsp';
-            $button .= '<button type="button" title="Hapus" data-id="' . $data->id . '" onclick="hapus(' . $data->id . ')" class="btn btn-danger btn-sm"> 
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($data) {
+                $button = '';
+                $button .= '<a href="' . url("master/divisi/update/" . $data->id) . '" title = "Edit" data-id="' . $data->id . '" class="btn btn-warning btn-sm"> <i class="fas fa-edit"></i> Edit</a>';
+                $button .= '&nbsp';
+                $button .= '&nbsp';
+                $button .= '<button type="button" title="Hapus" data-id="' . $data->id . '" onclick="hapus(' . $data->id . ')" class="btn btn-danger btn-sm"> 
                         <i class="fas fa-fw fa-trash"></i> Hapus
                     </button>';
-            $button .= '&nbsp';
-            $button .= '&nbsp';
-            $button .= '<a href="' . url("master/divisi/view/" . $data->id) . '" title = "Detail Divisi" data-id="' . $data->id . '" class="btn btn-primary btn-sm"> <i class="fas fa-search"></i> Detail</a>';
-            $button .= '&nbsp';
+                $button .= '&nbsp';
+                $button .= '&nbsp';
+                $button .= '<a href="' . url("master/divisi/view/" . $data->id) . '" title = "Detail Divisi" data-id="' . $data->id . '" class="btn btn-primary btn-sm"> <i class="fas fa-search"></i> Detail</a>';
+                $button .= '&nbsp';
 
-            return $button;
-        })
-        ->rawColumns(['aksi'])
-        ->make(true);
+                return $button;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 
     ///Datatable Karyawa
-    public function karyawan(Request $request){
+    public function karyawan(Request $request)
+    {
         $list = Karyawan::where('is_delete', 0)->with('divisi', 'jabatan')->get();
         return DataTables::of($list)
-        ->addIndexColumn()
-        ->addColumn('aksi', function($data){
-            $button = '';
-            $button .= '<a href="' . url("master/karyawan/update/" . $data->id) . '" title = "Edit" data-id="' . $data->id . '" class="btn btn-warning btn-sm"> <i class="fas fa-edit"></i> Edit</a>';
-            $button .= '&nbsp';
-            $button .= '&nbsp';
-            $button .= '<button type="button" title="Hapus" data-id="' . $data->id . '" onclick="hapus(' . $data->id . ')" class="btn btn-danger btn-sm"> 
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($data) {
+                $button = '';
+                $button .= '<a href="' . url("master/karyawan/update/" . $data->id) . '" title = "Edit" data-id="' . $data->id . '" class="btn btn-warning btn-sm"> <i class="fas fa-edit"></i> Edit</a>';
+                $button .= '&nbsp';
+                $button .= '&nbsp';
+                $button .= '<button type="button" title="Hapus" data-id="' . $data->id . '" onclick="hapus(' . $data->id . ')" class="btn btn-danger btn-sm"> 
                         <i class="fas fa-fw fa-trash"></i> Hapus
                     </button>';
-            $button .= '&nbsp';
-            $button .= '&nbsp';
-            $button .= '<a href="' . url("master/karyawan/view/" . $data->id) . '" title = "Detail Divisi" data-id="' . $data->id . '" class="btn btn-primary btn-sm"> <i class="fas fa-search"></i> Detail</a>';
-            $button .= '&nbsp';
+                $button .= '&nbsp';
+                $button .= '&nbsp';
+                $button .= '<a href="' . url("master/karyawan/view/" . $data->id) . '" title = "Detail Divisi" data-id="' . $data->id . '" class="btn btn-primary btn-sm"> <i class="fas fa-search"></i> Detail</a>';
+                $button .= '&nbsp';
 
-            return $button;
-        })
-        ->addColumn('divisi', function($data){
-            return $data->divisi->nama_divisi;
-        })
-        ->addColumn('jabatan', function($data){
-            return $data->jabatan->nama_jabatan;
-        })
-        ->rawColumns(['aksi'])
-        ->make(true);
+                return $button;
+            })
+            ->addColumn('divisi', function ($data) {
+                return $data->divisi->nama_divisi;
+            })
+            ->addColumn('jabatan', function ($data) {
+                return $data->jabatan->nama_jabatan;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 }
