@@ -79,10 +79,11 @@ License: You must have a valid license purchased only from themeforest(the above
 
             function getInbox(){
                 $.ajax({
-                    url: '{{url("api/common/chat/get-notif")}}',
+                    url: '{{url("api/getInbox")}}',
                     method: 'GET',
                     dataType: "JSON",
                     success: function (data) {
+                        console.log('data is', data);
                         if(data > 0){
                             $('#inbox-r').html(`
                             <span class="label label-rounded label-light-success font-weight-bolder">${data}</span>

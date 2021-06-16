@@ -117,6 +117,12 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::get('/folder_surat', 'Api\ApiFolderSuratController@list');
         });
 
+        Route::group(['prefix' => 'jabatan'], function () {
+            Route::get('/jabatan', 'Api\ApiJabatanController@list');
+            Route::get('/unit_kerja', 'Api\ApiUnitKerjaController@list');
+            Route::get('/department', 'Api\ApiDepartmentController@list');
+        });
+
         Route::get('getInbox', 'Api\ApiInboxController@ct_inbox');
 
         Route::get('dataInbox', 'Admin\HomeController@dataInbox');
@@ -142,6 +148,7 @@ Route::group(['middleware' => 'authLogin'], function () {
     });
 
     Route::group(['prefix' => 'api/'], function () {
+        Route::get('notifikasi', 'Admin\HomeController@notifikasi');
         Route::group(['prefix' => 'approval'], function () {
             Route::get('/log', 'Api\ApiApprovalController@log');
         });
@@ -156,6 +163,38 @@ Route::group(['middleware' => 'authLogin'], function () {
             Route::get('/unit', 'Api\ApiSelect2Controller@unit');
             Route::get('/karyawan', 'Api\ApiSelect2Controller@karyawan');
             ///lanjuut dari sisi
+        });
+    });
+
+    Route::group(['prefix' => 'jabatan/'], function () {
+        Route::group(['prefix' => 'jabatan'], function () {
+            Route::get('/', 'jabatan\JabatanController@index');
+            Route::get('/create', 'jabatan\JabatanController@create');
+            Route::post('/create', 'jabatan\JabatanController@create');
+            Route::get('/update/{id}', 'jabatan\JabatanController@update');
+            Route::get('/view/{id}', 'jabatan\JabatanController@view');
+            Route::post('/update/{id}', 'jabatan\JabatanController@update');
+            Route::post('/delete/{id}', 'jabatan\JabatanController@delete');
+        });
+
+        Route::group(['prefix' => 'unit_kerja'], function () {
+            Route::get('/', 'jabatan\UnitKerjaController@index');
+            Route::get('/create', 'jabatan\UnitKerjaController@create');
+            Route::post('/create', 'jabatan\UnitKerjaController@create');
+            Route::get('/update/{id}', 'jabatan\UnitKerjaController@update');
+            Route::get('/view/{id}', 'jabatan\UnitKerjaController@view');
+            Route::post('/update/{id}', 'jabatan\UnitKerjaController@update');
+            Route::post('/delete/{id}', 'jabatan\UnitKerjaController@delete');
+        });
+
+        Route::group(['prefix' => 'department'], function () {
+            Route::get('/', 'jabatan\DepartmentController@index');
+            Route::get('/create', 'jabatan\DepartmentController@create');
+            Route::post('/create', 'jabatan\DepartmentController@create');
+            Route::get('/update/{id}', 'jabatan\DepartmentController@update');
+            Route::get('/view/{id}', 'jabatan\DepartmentController@view');
+            Route::post('/update/{id}', 'jabatan\DepartmentController@update');
+            Route::post('/delete/{id}', 'jabatan\DepartmentController@delete');
         });
     });
 
@@ -259,7 +298,7 @@ Route::group(['middleware' => 'authLogin'], function () {
     });
 
 
-    Route::get('notifikasi', 'Admin\HomeController@notifikasi');
+
 
     Route::get('/quick-search', 'PagesController@quickSearch')->name('quick-search');
 });
